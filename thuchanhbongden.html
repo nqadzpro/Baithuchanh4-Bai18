@@ -6,19 +6,24 @@
 <body>
 <script>
 let Battery = function () {
+    this.energy = 0;
     this.setEnergy = function (energy) {
-        this.energy = energy;
+        if (energy > 0) {
+            this.energy = energy;
+        }
     };
     this.getEnergy = function () {
         return this.energy;
     }
     this.decreaseEnergy = function () {
-        if (this.energy>0) {
+        if (this.energy > 0) {
             this.energy--;
         }
     }
 };
 let FlashLamp = function () {
+    this.status = false;
+    this.battery = null;
     this.setBattery = function (battery) {
         this.battery = battery;
     };
@@ -34,7 +39,17 @@ let FlashLamp = function () {
         }
     };
     this.turnOn = function () {
-        this.status = true;
+        if (!this.battery) {
+            alert("No battery installed");
+            return;
+        }
+        if (this.battery.getEnergy() > 0) {
+            this.status = true;
+            this.battery.decreaseEnergy();
+        } else {
+            this.status = false;
+            alert("Battery is empty");
+        }
     };
     this.turnOff = function () {
         this.status = false;
